@@ -1,4 +1,4 @@
-# brat-new
+# @kasabaileys/brat
 
 Generate **brat-style images and videos (MP4/GIF)** with clean text layout.
 Text in → image or video out.
@@ -16,13 +16,13 @@ Text in → image or video out.
 
 ### npm
 ```bash
-npm install brat-new
+npm install @kasabaileys/brat
 ```
 
 ## 🖼️ Generate Image
 ```javascript
 import { writeFile } from 'fs/promises';
-import { bratGen } from 'brat-new';
+import { bratGen } from '@kasabaileys/brat';
 
 const buf = await bratGen('kangen masa lalu ya?');
 
@@ -33,7 +33,7 @@ console.log('Done!');
 ## 🎬 Generate Video
 ```javascript
 import { writeFile } from 'fs/promises';
-import { bratVid } from 'brat-new/video';
+import { bratVid } from '@kasabaileys/brat/video';
 
 const buf = await bratVid('mending tidur gweh mah', {
   outputFormat: 'mp4'
@@ -154,7 +154,7 @@ bratVid('teks', { debugMode: true });
 ## 🧪 Full Example (Lyric Sync)
 ```javascript
 import { writeFile } from 'fs/promises';
-import { bratVid } from 'brat-new/video';
+import { bratVid } from @kasabaileys/brat/video';
 
 const vid = await bratVid('akugweh kasa', {
   fast_progress: true,
