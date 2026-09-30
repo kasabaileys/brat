@@ -1,5 +1,5 @@
 {
-  "name": "brat-new",
+  "name": "@kasabaileys/brat",
   "version": "1.0.0",
   "description": "Generate brat-style images with emoji support using @napi-rs/canvas",
   "type": "module",
