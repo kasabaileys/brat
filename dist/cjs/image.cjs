@@ -12,18 +12,17 @@ var _documentCurrentScript = typeof document !== 'undefined' ? document.currentS
 const __dirname$2 = path.dirname(url.fileURLToPath((typeof document === 'undefined' ? require('u' + 'rl').pathToFileURL(__filename).href : (_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('image.cjs', document.baseURI).href))));
 
 const DEFAULT_CFG = {
-    W: 500, H: 500,
-    BOX_W: 500, BOX_H: 500,
-    BOX_PAD: 20,
+    W: 1024, H: 1024,
+    BOX_W: 1024, BOX_H: 1024,
+    BOX_PAD: 40,
     LINE_H: 1.08,
     BASELINE_ADJ: 0.75,
     FONT_NAME: 'Arial Narrow',
     FONT_WEIGHT: 400,
     FALLBACK_FONT: 'Arial, sans-serif',
-    FS_MIN: 8,
-    FS_MAX: 130,
-    BLUR: 2,
-    SCALE: 2,
+    FS_MIN: 16,
+    FS_MAX: 260,
+    BLUR: 0,
     C_BG: '#ffffff',
     C_BOX: '#ffffff', 
     C_TEXT: '#000000',
@@ -539,16 +538,6 @@ async function bratGen(text, options = {}) {
 		...DEFAULT_CFG,
 		...resolveTheme(options)
 	};
-
-	// SCALE: supersampling. Layout & efek blur tetap sama persis seperti
-	// kanvas 500x500, tapi dirender pada resolusi SCALE kali lebih besar
-	// (default 2 = 1000x1000). Set scale: 1 untuk perilaku lama.
-	const SCALE = Math.min(4, Math.max(1, Number(options.scale ?? options.SCALE ?? cfg.SCALE) || 1));
-	if (SCALE !== 1) {
-		for (const k of ['W', 'H', 'BOX_W', 'BOX_H', 'BOX_PAD', 'FS_MIN', 'FS_MAX', 'BLUR']) {
-			cfg[k] = cfg[k] * SCALE;
-		}
-	}
 	registerFonts(cfg.fontPaths);
 
 	const {
@@ -611,7 +600,7 @@ async function bratGen(text, options = {}) {
 	const lineX = bx + BOX_PAD;
 
 	ctx.save();
-	ctx.filter = `blur(${BLUR}px)`;
+	ctx.filter = BLUR > 0 ? `blur(${BLUR}px)` : "none";
 	ctx.fillStyle = C_TEXT;
 	ctx.textBaseline = 'alphabetic';
 	ctx.font = fontString(fontSize, FONT_NAME, FONT_WEIGHT, FALLBACK_FONT);

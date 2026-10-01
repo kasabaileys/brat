@@ -16,17 +16,17 @@ var _documentCurrentScript = typeof document !== 'undefined' ? document.currentS
 const __dirname$2 = path.dirname(url.fileURLToPath((typeof document === 'undefined' ? require('u' + 'rl').pathToFileURL(__filename).href : (_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('video.cjs', document.baseURI).href))));
 
 const DEFAULT_CFG = {
-    W: 500, H: 500,
-    BOX_W: 500, BOX_H: 500,
-    BOX_PAD: 20,
+    W: 1024, H: 1024,
+    BOX_W: 1024, BOX_H: 1024,
+    BOX_PAD: 40,
     LINE_H: 1.08,
     BASELINE_ADJ: 0.75,
     FONT_NAME: 'Arial Narrow',
     FONT_WEIGHT: 400,
     FALLBACK_FONT: 'Arial, sans-serif',
-    FS_MIN: 8,
-    FS_MAX: 130,
-    BLUR: 2,
+    FS_MIN: 16,
+    FS_MAX: 260,
+    BLUR: 0,
     C_BG: '#ffffff',
     C_BOX: '#ffffff', 
     C_TEXT: '#000000',
@@ -604,7 +604,7 @@ async function bratGen(text, options = {}) {
 	const lineX = bx + BOX_PAD;
 
 	ctx.save();
-	ctx.filter = `blur(${BLUR}px)`;
+	ctx.filter = BLUR > 0 ? `blur(${BLUR}px)` : "none";
 	ctx.fillStyle = C_TEXT;
 	ctx.textBaseline = 'alphabetic';
 	ctx.font = fontString(fontSize, FONT_NAME, FONT_WEIGHT, FALLBACK_FONT);
@@ -688,10 +688,10 @@ async function encodeMP4(concatPath, outPath, options = {}) {
     const args = [
         '-y',
         '-f', 'concat', '-safe', '0', '-i', concatPath,
-        '-vf', 'scale=512:512',
+        '-vf', 'scale=1024:1024:flags=lanczos',
         '-c:v', 'libx264',
-        '-preset', 'fast',
-        '-crf', '18',
+        '-preset', 'slow',
+        '-crf', '14',
         '-pix_fmt', 'yuv420p',
         '-movflags', '+faststart',
         outPath,
@@ -715,11 +715,11 @@ async function encodeGIF(concatPath, outPath, options = {}) {
         '-y',
         '-f', 'concat', '-safe', '0', '-i', concatPath,
         '-vf', [
-            'fps=10',
-            'scale=512:512:flags=lanczos',
+            'fps=15',
+            'scale=1024:1024:flags=lanczos',
             'split[s0][s1]',
-            '[s0]palettegen=max_colors=64[p]',
-            '[s1][p]paletteuse=dither=bayer',
+            '[s0]palettegen=max_colors=256:stats_mode=diff[p]',
+            '[s1][p]paletteuse=dither=sierra2_4a',
         ].join(','),
         '-loop', '0',
         outPath,

@@ -69,7 +69,7 @@ type ImageOptions = {
   C_TEXT?: string; // Text color
 
   // Effects
-  BLUR?: number; // Text blur amount
+  BLUR?: number; // Text blur amount (default: 0 = sharp)
 
   // Fonts
   FONT_NAME?: string;
@@ -154,7 +154,7 @@ bratVid('teks', { debugMode: true });
 ## 🧪 Full Example (Lyric Sync)
 ```javascript
 import { writeFile } from 'fs/promises';
-import { bratVid } from @kasabaileys/brat/video';
+import { bratVid } from '@kasabaileys/brat/video';
 
 const vid = await bratVid('akugweh kasa', {
   fast_progress: true,
